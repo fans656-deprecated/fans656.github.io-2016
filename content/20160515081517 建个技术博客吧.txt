@@ -38,3 +38,21 @@ http://stackoverflow.com/questions/16373747/permission-denied-doing-os-mkdird-af
 
 2016-05-15 09:48:23
 git nested repo 比较麻烦，琢磨怎么绕过去，，最暴力的方法当然是把输出放到一个没有 parent repo 的地方
+
+2016-05-15 10:01:25
+local repo commit 搞定了，下来想想怎么弄服务器那边
+
+2016-05-15 11:04:35
+发现部署是个问题.. 这相当于建站了
+自己这个设定相当于整个网站其实是放在一个 repo 里的
+    repo/
+        content/   # posts of txt
+        output/    # the site
+现在用flask的话，其实很多部分是静态页面，应该直接用apache来server
+但是只用apache也不行，以后还会有动态的内容
+所以.. 看样子得学学apache
+
+2016-05-15 12:30:20
+vps 上跑的是 centos，因为翻墙的缘故 putty ssh 比较慢
+所以开个虚拟机学 apache，虚拟机上跑的是 ubuntu
+两个发行版的 apache 有些配置细节不一样，但大同小异都可以 google
