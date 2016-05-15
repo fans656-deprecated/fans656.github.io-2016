@@ -1,0 +1,40 @@
+2016-05-15 08:15:27
+准备搭一个个人的技术博客。是的，晓得有不少现成的工具可用(WordPress、github.io、Jekyll等等)，但自己还是想先从零开始尝试一下；之后再去参照这些工具，就更能理解个中技术的来龙去脉(就像当初学设计模式，因为自己确实在实际的开发中遇到过痛点，所以看到一个正好用来解决某个痛点的模式时就更能理解和印象深刻)
+想要采用的大抵技术路线如下：
+    
+    本地 python + git 将 txt 文件转换为 html
+    上传至远程 git repo
+    服务器 pull 下来更新了的 repo，更新网站
+
+不用 github.io 是因为将来想有评论功能，而 g 只能做静态页面
+本地 txt -> html 的功能大抵是 Jekyll 的功能，自己试着造个轮子
+服务器如果找不到好的就用自己的 Bandwagon VPS 吧
+now, let the coding begin...
+
+2016-05-15 08:43:32
+写起来就会发现具体的功能要求，比如从txt到html的转义问题：
+    
+    左右尖括号这种需要转义成 &lt; 等
+    txt中的换行不加处理的话，在html中显示出来就是一坨，需要加 <br>
+
+2016-05-15 08:50:40
+输出html的文件夹，目前是每次输出都删掉重新建一个，发现
+    
+    shutil.rmtree()
+    os.mkdir()
+
+有时候会在 mkdir 时 Permission denied
+
+http://stackoverflow.com/questions/16373747/permission-denied-doing-os-mkdird-after-running-shutil-rmtreed-in-python
+这里说了这个问题
+总的来说就是 windows 删除文件可能是 asynchronous 的
+所以解决办法么，就是 retry with a delay
+
+2016-05-15 09:16:45
+好了，输出差不多了——差不多的意思其实只是有了可用的功能，效果上嘛，等整个流程走通了，再去雕琢细节
+
+2016-05-15 09:25:56
+刚才说上传的流程中利用 git ，为什么要用它呢？琢磨了一下，发觉主要是用它的 diff 功能——增量更新；否则如果直接给服务器上传的话，内容一多，每次都传所有内容是比较浪费的，而且没备案的东西直接明文在网上跑也怕VPS被封掉
+
+2016-05-15 09:48:23
+git nested repo 比较麻烦，琢磨怎么绕过去，，最暴力的方法当然是把输出放到一个没有 parent repo 的地方
