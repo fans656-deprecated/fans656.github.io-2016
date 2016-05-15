@@ -56,3 +56,12 @@ local repo commit 搞定了，下来想想怎么弄服务器那边
 vps 上跑的是 centos，因为翻墙的缘故 putty ssh 比较慢
 所以开个虚拟机学 apache，虚拟机上跑的是 ubuntu
 两个发行版的 apache 有些配置细节不一样，但大同小异都可以 google
+
+2016-05-15 23:21:43
+脚本里对文件系统里的操作过快就会出现各种人工操作遇不到的问题
+之前的一个 rmdir mkdir 因为操作系统 asynchronously 出问题
+这次又遇到一个文件 flush 问题
+    index_file = open('index.html', 'w') 
+之后向这个文件写入内容后直接subprocess进行git操作，结果commit上去的总是一个空文件
+最后在git操作前 index_file.close() 了一下就好了——这是强制把内存里的数据flush进文件了
+另外commit不上内容也是因为第一次commit了新文件，而之后每次清空 public_html 文件夹重新创建这些内容，执行相同的程序逻辑，就总是相同的结果

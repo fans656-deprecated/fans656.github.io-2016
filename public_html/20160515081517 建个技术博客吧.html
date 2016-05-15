@@ -67,6 +67,15 @@ local&nbsp;repo&nbsp;commit&nbsp;搞定了，下来想想怎么弄服务器那�
 vps&nbsp;上跑的是&nbsp;centos，因为翻墙的缘故&nbsp;putty&nbsp;ssh&nbsp;比较慢<br>
 所以开个虚拟机学&nbsp;apache，虚拟机上跑的是&nbsp;ubuntu<br>
 两个发行版的&nbsp;apache&nbsp;有些配置细节不一样，但大同小异都可以&nbsp;google<br>
+<br>
+2016-05-15&nbsp;23:21:43<br>
+脚本里对文件系统里的操作过快就会出现各种人工操作遇不到的问题<br>
+之前的一个&nbsp;rmdir&nbsp;mkdir&nbsp;因为操作系统&nbsp;asynchronously&nbsp;出问题<br>
+这次又遇到一个文件&nbsp;flush&nbsp;问题<br>
+&nbsp;&nbsp;&nbsp;&nbsp;index_file&nbsp;=&nbsp;open('index.html',&nbsp;'w')&nbsp;<br>
+之后向这个文件写入内容后直接subprocess进行git操作，结果commit上去的总是一个空文件<br>
+最后在git操作前&nbsp;index_file.close()&nbsp;了一下就好了——这是强制把内存里的数据flush进文件了<br>
+另外commit不上内容也是因为第一次commit了新文件，而之后每次清空&nbsp;public_html&nbsp;文件夹重新创建这些内容，执行相同的程序逻辑，就总是相同的结果<br>
 </p>
   </body>
 </html>
