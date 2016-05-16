@@ -8,14 +8,11 @@ app.debug = True
 
 @app.route('/')
 def pull():
-    try:
-        path = os.path.dirname(__file__)
-        os.chdir(path)
-        output = subprocess.check_output('git pull', shell=True)
-        s = 'pulled at {}'.format(datetime.now())
-        s += '<pre>{}</pre>'.format(output)
-    except Exception as e:
-        return 'exception:\n' + str(e)
+    path = os.path.dirname(__file__)
+    os.chdir(path)
+    output = subprocess.check_output('git pull', shell=True)
+    s = 'pulled at {}'.format(datetime.now())
+    s += '<pre>{}</pre>'.format(output)
     return s
 
 if __name__ == '__main__':
