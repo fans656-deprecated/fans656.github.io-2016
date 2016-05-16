@@ -11,7 +11,7 @@ def pull():
     path = os.path.dirname(os.path.abspath(__file__))
     os.chdir(path)
     try:
-        output = subprocess.check_output('git pull', shell=True)
+        output = subprocess.call('git pull', shell=True)
     except Exception as e:
         output = str(dir(e))
         #output += '\n' + str(e.cmd)
