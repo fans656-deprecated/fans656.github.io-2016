@@ -84,3 +84,7 @@ http://stackoverflow.com/a/32789559/3881776
 
 现在在tackle执行git命令出错的问题
 另外，还有一个问题是flask开启后原来的静态页面服务器不server了
+
+2016-05-16 15:34:31
+服务器上要pull，但是pull下来的新的文件permission又高于apache的权限，导致再次pull的时候git访问不了需要的文件
+这...
