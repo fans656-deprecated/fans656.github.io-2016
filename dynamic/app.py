@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 app.debug = True
 
-@app.route('/pull')
+@app.route('/')
 def pull():
     try:
         path = os.path.dirname(__file__)
