@@ -92,3 +92,6 @@ http://stackoverflow.com/a/32789559/3881776
 2016-05-16 15:38:38
 把 /var/www/fans656_blog 整个交给 apache (user+group) 了
 终于好了哇咔咔
+
+2016-05-16 16:02:35
+把本地vim里快捷键push的功能也弄好了，，现在写完txt一个;r就能在浏览器里看到更新了的网站了
