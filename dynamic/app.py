@@ -8,7 +8,7 @@ app.debug = True
 
 @app.route('/')
 def pull():
-    path = os.path.dirname(__file__)
+    path = os.path.dirname(os.path.abspath(__file__))
     os.chdir(path)
     try:
         output = subprocess.check_output('git pull', shell=True)
@@ -25,4 +25,4 @@ def pull():
     return s
 
 if __name__ == '__main__':
-    app.run(debug=True, listen=('', 6560))
+    app.run(debug=True, host='0.0.0.0', port=6560)
