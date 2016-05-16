@@ -14,7 +14,12 @@ def pull():
         output = subprocess.check_output('git pull', shell=True)
     except Exception as e:
         output = str(dir(e))
+        output += '\n' + e.cmd
+        output += '\n' + e.args
+        output += '\n' + e.message
         output += '\n' + e.output
+        output += '\n' + e.returncode
+        output += '\n' + str(e)
     s = 'pulled at {}'.format(datetime.now())
     s += '<pre>{}</pre>'.format(output)
     return s
