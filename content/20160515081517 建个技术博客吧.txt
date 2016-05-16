@@ -65,3 +65,22 @@ vps 上跑的是 centos，因为翻墙的缘故 putty ssh 比较慢
 之后向这个文件写入内容后直接subprocess进行git操作，结果commit上去的总是一个空文件
 最后在git操作前 index_file.close() 了一下就好了——这是强制把内存里的数据flush进文件了
 另外commit不上内容也是因为第一次commit了新文件，而之后每次清空 public_html 文件夹重新创建这些内容，执行相同的程序逻辑，就总是相同的结果
+
+2016-05-15 23:43:00
+给 vps 部上去了，，下一步是加个每次本地commit之后给服务器发消息让它去pull一下的机制
+然后就可以完全本地操作而直接看到外网开放的网站内容了，哈哈~~
+
+2016-05-16 10:43:52
+搞定 apache mod_wsgi + flask 了
+卡在 ImportError 上好久，最后靠强行在 sys.path 里添加 flask 所在路径解决了
+应该是还有更好的解决办法的
+
+下来试一试自动pull
+
+2016-05-16 13:26:04
+被 apache 接管的 python 执行环境很蛋疼，没有输出也看不到exception
+最后用这里的一个方法开启了flask的debug模式
+http://stackoverflow.com/a/32789559/3881776
+
+现在在tackle执行git命令出错的问题
+另外，还有一个问题是flask开启后原来的静态页面服务器不server了
