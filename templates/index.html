@@ -1,0 +1,16 @@
+<html>
+<head>
+<link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<h1>fans656's blog</h1>
+<ul>
+    {% for post in posts %}
+    <li>
+    <a href="{{ post.href }}">{{ post.title }}</a>
+    <span class="date">{{post.date}}</span>
+    </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
