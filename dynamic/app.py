@@ -11,7 +11,7 @@ def pull():
     try:
         path = os.path.dirname(__file__)
         os.chdir(path)
-        output = subprocess.check_output('git status', shell=True)
+        output = subprocess.check_output('git pull', shell=True)
         s = 'pulled at {}'.format(datetime.now())
         s += '<pre>{}</pre>'.format(output)
     except Exception as e:
