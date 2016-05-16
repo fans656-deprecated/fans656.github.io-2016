@@ -10,7 +10,10 @@ app.debug = True
 def pull():
     path = os.path.dirname(__file__)
     os.chdir(path)
-    output = subprocess.check_output('git pull', shell=True)
+    try:
+        output = subprocess.check_output('git pull', shell=True)
+    except Exception as e:
+        output = e.output
     s = 'pulled at {}'.format(datetime.now())
     s += '<pre>{}</pre>'.format(output)
     return s
