@@ -20,8 +20,8 @@ def pull():
         #output += '\n' + str(e.output)
         #output += '\n' + str(e.returncode)
         output += '\n' + str(e)
-    s = 'pulled at {}'.format(datetime.now())
-    s += '<pre>{}</pre>'.format(output)
+    s = 'pulled at {0}'.format(datetime.now())
+    s += '<pre>{0}</pre>'.format(output)
     return s
 
 if __name__ == '__main__':
