@@ -99,3 +99,6 @@ http://stackoverflow.com/a/32789559/3881776
 2016-05-16 22:59:29
 打算写点css把blog美化下——于是需要做html template了
 感觉自己写这个会比较费劲，干脆拿Jinja2来用
+
+2016-05-17 00:11:53
+css也搞定，用jinja2做的template
