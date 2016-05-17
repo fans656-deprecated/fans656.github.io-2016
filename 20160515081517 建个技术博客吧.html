@@ -1,0 +1,115 @@
+<html>
+<head>
+<link rel="stylesheet" href="css/posts.css" />
+</head>
+<body>
+<h1><a href="index.html">fans656's blog</a></h1>
+<p>
+<span class="date">2016-05-15&nbsp;08:15:27</span><br>
+准备搭一个个人的技术博客。是的，晓得有不少现成的工具可用(WordPress、github.io、Jekyll等等)，但自己还是想先从零开始尝试一下；之后再去参照这些工具，就更能理解个中技术的来龙去脉(就像当初学设计模式，因为自己确实在实际的开发中遇到过痛点，所以看到一个正好用来解决某个痛点的模式时就更能理解和印象深刻)<br>
+想要采用的大抵技术路线如下：<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;本地&nbsp;python&nbsp;+&nbsp;git&nbsp;将&nbsp;txt&nbsp;文件转换为&nbsp;html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;上传至远程&nbsp;git&nbsp;repo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;服务器&nbsp;pull&nbsp;下来更新了的&nbsp;repo，更新网站<br>
+<br>
+不用&nbsp;github.io&nbsp;是因为将来想有评论功能，而&nbsp;g&nbsp;只能做静态页面<br>
+本地&nbsp;txt&nbsp;-&gt;&nbsp;html&nbsp;的功能大抵是&nbsp;Jekyll&nbsp;的功能，自己试着造个轮子<br>
+服务器如果找不到好的就用自己的&nbsp;Bandwagon&nbsp;VPS&nbsp;吧<br>
+now,&nbsp;let&nbsp;the&nbsp;coding&nbsp;begin...<br>
+<br>
+<span class="date">2016-05-15&nbsp;08:43:32</span><br>
+写起来就会发现具体的功能要求，比如从txt到html的转义问题：<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;左右尖括号这种需要转义成&nbsp;&lt;&nbsp;等<br>
+&nbsp;&nbsp;&nbsp;&nbsp;txt中的换行不加处理的话，在html中显示出来就是一坨，需要加&nbsp;&lt;br&gt;<br>
+<br>
+<span class="date">2016-05-15&nbsp;08:50:40</span><br>
+输出html的文件夹，目前是每次输出都删掉重新建一个，发现<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;shutil.rmtree()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;os.mkdir()<br>
+<br>
+有时候会在&nbsp;mkdir&nbsp;时&nbsp;Permission&nbsp;denied<br>
+<br>
+http://stackoverflow.com/questions/16373747/permission-denied-doing-os-mkdird-after-running-shutil-rmtreed-in-python<br>
+这里说了这个问题<br>
+总的来说就是&nbsp;windows&nbsp;删除文件可能是&nbsp;asynchronous&nbsp;的<br>
+所以解决办法么，就是&nbsp;retry&nbsp;with&nbsp;a&nbsp;delay<br>
+<br>
+<span class="date">2016-05-15&nbsp;09:16:45</span><br>
+好了，输出差不多了——差不多的意思其实只是有了可用的功能，效果上嘛，等整个流程走通了，再去雕琢细节<br>
+<br>
+<span class="date">2016-05-15&nbsp;09:25:56</span><br>
+刚才说上传的流程中利用&nbsp;git&nbsp;，为什么要用它呢？琢磨了一下，发觉主要是用它的&nbsp;diff&nbsp;功能——增量更新；否则如果直接给服务器上传的话，内容一多，每次都传所有内容是比较浪费的，而且没备案的东西直接明文在网上跑也怕VPS被封掉<br>
+<br>
+<span class="date">2016-05-15&nbsp;09:48:23</span><br>
+git&nbsp;nested&nbsp;repo&nbsp;比较麻烦，琢磨怎么绕过去，，最暴力的方法当然是把输出放到一个没有&nbsp;parent&nbsp;repo&nbsp;的地方<br>
+<br>
+<span class="date">2016-05-15&nbsp;10:01:25</span><br>
+local&nbsp;repo&nbsp;commit&nbsp;搞定了，下来想想怎么弄服务器那边<br>
+<br>
+<span class="date">2016-05-15&nbsp;11:04:35</span><br>
+发现部署是个问题..&nbsp;这相当于建站了<br>
+自己这个设定相当于整个网站其实是放在一个&nbsp;repo&nbsp;里的<br>
+&nbsp;&nbsp;&nbsp;&nbsp;repo/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content/&nbsp;&nbsp;&nbsp;#&nbsp;posts&nbsp;of&nbsp;txt<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output/&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;the&nbsp;site<br>
+现在用flask的话，其实很多部分是静态页面，应该直接用apache来server<br>
+但是只用apache也不行，以后还会有动态的内容<br>
+所以..&nbsp;看样子得学学apache<br>
+<br>
+<span class="date">2016-05-15&nbsp;12:30:20</span><br>
+vps&nbsp;上跑的是&nbsp;centos，因为翻墙的缘故&nbsp;putty&nbsp;ssh&nbsp;比较慢<br>
+所以开个虚拟机学&nbsp;apache，虚拟机上跑的是&nbsp;ubuntu<br>
+两个发行版的&nbsp;apache&nbsp;有些配置细节不一样，但大同小异都可以&nbsp;google<br>
+<br>
+<span class="date">2016-05-15&nbsp;23:21:43</span><br>
+脚本里对文件系统里的操作过快就会出现各种人工操作遇不到的问题<br>
+之前的一个&nbsp;rmdir&nbsp;mkdir&nbsp;因为操作系统&nbsp;asynchronously&nbsp;出问题<br>
+这次又遇到一个文件&nbsp;flush&nbsp;问题<br>
+&nbsp;&nbsp;&nbsp;&nbsp;index_file&nbsp;=&nbsp;open('index.html',&nbsp;'w')&nbsp;<br>
+之后向这个文件写入内容后直接subprocess进行git操作，结果commit上去的总是一个空文件<br>
+最后在git操作前&nbsp;index_file.close()&nbsp;了一下就好了——这是强制把内存里的数据flush进文件了<br>
+另外commit不上内容也是因为第一次commit了新文件，而之后每次清空&nbsp;public_html&nbsp;文件夹重新创建这些内容，执行相同的程序逻辑，就总是相同的结果<br>
+<br>
+<span class="date">2016-05-15&nbsp;23:43:00</span><br>
+给&nbsp;vps&nbsp;部上去了，，下一步是加个每次本地commit之后给服务器发消息让它去pull一下的机制<br>
+然后就可以完全本地操作而直接看到外网开放的网站内容了，哈哈~~<br>
+<br>
+<span class="date">2016-05-16&nbsp;10:43:52</span><br>
+搞定&nbsp;apache&nbsp;mod_wsgi&nbsp;+&nbsp;flask&nbsp;了<br>
+卡在&nbsp;ImportError&nbsp;上好久，最后靠强行在&nbsp;sys.path&nbsp;里添加&nbsp;flask&nbsp;所在路径解决了<br>
+应该是还有更好的解决办法的<br>
+<br>
+下来试一试自动pull<br>
+<br>
+<span class="date">2016-05-16&nbsp;13:26:04</span><br>
+被&nbsp;apache&nbsp;接管的&nbsp;python&nbsp;执行环境很蛋疼，没有输出也看不到exception<br>
+最后用这里的一个方法开启了flask的debug模式<br>
+http://stackoverflow.com/a/32789559/3881776<br>
+<br>
+现在在tackle执行git命令出错的问题<br>
+另外，还有一个问题是flask开启后原来的静态页面服务器不server了<br>
+<br>
+<span class="date">2016-05-16&nbsp;15:34:31</span><br>
+服务器上要pull，但是pull下来的新的文件permission又高于apache的权限，导致再次pull的时候git访问不了需要的文件<br>
+这...<br>
+<br>
+<span class="date">2016-05-16&nbsp;15:38:38</span><br>
+把&nbsp;/var/www/fans656_blog&nbsp;整个交给&nbsp;apache&nbsp;(user+group)&nbsp;了<br>
+终于好了哇咔咔<br>
+<br>
+<span class="date">2016-05-16&nbsp;16:02:35</span><br>
+把本地vim里快捷键push的功能也弄好了，，现在写完txt一个;r就能在浏览器里看到更新了的网站了<br>
+<br>
+<span class="date">2016-05-16&nbsp;22:59:29</span><br>
+打算写点css把blog美化下——于是需要做html&nbsp;template了<br>
+感觉自己写这个会比较费劲，干脆拿Jinja2来用<br>
+<br>
+<span class="date">2016-05-17&nbsp;00:11:53</span><br>
+css也搞定，用jinja2做的template<br>
+
+</p>
+</body>
+</html>
