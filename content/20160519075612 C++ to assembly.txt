@@ -1,0 +1,24 @@
+What happens when the following C++ program is executed?
+    
+    void f() {}
+    int main() { f(); }
+
+Answer:
+    
+    # in caller
+    call f  # push the return address (address of the instruction after this one) onto the stack
+            # then jump to the address of f's first instruction
+            # equal to:
+            #    push eip
+            #    jmp f
+    mov eax, 0    # go back here after called f
+    
+    # in callee
+    push ebp      # save caller's frame pointer
+    mov ebp, esp  # establish callee's frame pointer
+    leave         # unwind stack
+                  # and restore caller's frame pointer
+                  # equal to:
+                  #     mov esp, ebp
+                  #     pop ebp
+    ret           # pop the return address back to eip

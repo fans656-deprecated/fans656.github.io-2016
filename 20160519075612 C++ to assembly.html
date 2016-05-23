@@ -1,0 +1,35 @@
+<html>
+<head>
+<link rel="stylesheet" href="css/posts.css" />
+</head>
+<body>
+<h1><a href="index.html">&lt;- fans656's blog</a></h1>
+<p>
+What&nbsp;happens&nbsp;when&nbsp;the&nbsp;following&nbsp;C++&nbsp;program&nbsp;is&nbsp;executed?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;f()&nbsp;{}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;main()&nbsp;{&nbsp;f();&nbsp;}<br>
+<br>
+Answer:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;in&nbsp;caller<br>
+&nbsp;&nbsp;&nbsp;&nbsp;call&nbsp;f&nbsp;&nbsp;#&nbsp;push&nbsp;the&nbsp;return&nbsp;address&nbsp;(address&nbsp;of&nbsp;the&nbsp;instruction&nbsp;after&nbsp;this&nbsp;one)&nbsp;onto&nbsp;the&nbsp;stack<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;then&nbsp;jump&nbsp;to&nbsp;the&nbsp;address&nbsp;of&nbsp;f's&nbsp;first&nbsp;instruction<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;equal&nbsp;to:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;push&nbsp;eip<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;jmp&nbsp;f<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mov&nbsp;eax,&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;go&nbsp;back&nbsp;here&nbsp;after&nbsp;called&nbsp;f<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;in&nbsp;callee<br>
+&nbsp;&nbsp;&nbsp;&nbsp;push&nbsp;ebp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;save&nbsp;caller's&nbsp;frame&nbsp;pointer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mov&nbsp;ebp,&nbsp;esp&nbsp;&nbsp;#&nbsp;establish&nbsp;callee's&nbsp;frame&nbsp;pointer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;leave&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;unwind&nbsp;stack<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;and&nbsp;restore&nbsp;caller's&nbsp;frame&nbsp;pointer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;equal&nbsp;to:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mov&nbsp;esp,&nbsp;ebp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pop&nbsp;ebp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ret&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;pop&nbsp;the&nbsp;return&nbsp;address&nbsp;back&nbsp;to&nbsp;eip<br>
+
+</p>
+</body>
+</html>
