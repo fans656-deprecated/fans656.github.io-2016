@@ -1,0 +1,59 @@
+2016-05-19 07:56:58
+函数调用的参数和局部变量都是放在栈(stack)中的
+栈是由寄存器esp定义的——esp永远指向栈顶
+函数调用需要保存现场，即记住caller在调用callee前的状态，以便callee运行完后返回caller继续执行。这个现场包括当时寄存器们的值。
+现场加上函数本身的参数和局部变量，一起放在栈上，谓之一个函数的frame
+frame由ebp定义——ebp指向frame底部
+
+一般的x86机上，栈是grow downward的，即从高地址往低地址增长
+    
+    high address  os kernel
+                  stack
+                  heap
+                  static
+    low address   code
+
+先来看看一个简单函数的汇编代码
+    
+    // c++
+    void f() {}
+    int main() { f(); }
+
+    # assembly
+    __Z1fv:
+        push	ebp
+        mov	ebp, esp
+        pop	ebp
+        ret
+    _main:
+        push	ebp
+        mov	ebp, esp
+        and	esp, -16
+        call	__Z1fv  # f()
+        mov	eax, 0
+        leave
+        ret
+
+进入`main`函数时，做了三件事：
+    
+    1. push ebp  # 记住caller的frame
+    2. mov ebp, esp  # 开启自己的frame
+    3. and esp, -16  # 栈顶16字节对齐 (-16 是 0xfffffff0)
+
+然后，就是 call f 函数了。call 实际上做的是：
+(PS: f被叫成 __Z1fv 是因为 C++ 的 name mangling)
+
+    1. 把 call 之后指令的地址入栈
+    2. 跳转到 callee 的地址 (即将 callee 第一条指令的地址放在 eip 中)
+
+接下来就执行 f 的函数体，跟进入main函数时做的事情类似
+    
+    1. push ebp
+    2. mov ebp, esp
+
+因为没有别的动作了，接下来就是返回的过程
+    
+    1. pop ebp  # 恢复caller的frame
+    2. ret  # 返回caller继续执行
+
+ret 实际上做的事是从栈上pop出返回地址放进eip中

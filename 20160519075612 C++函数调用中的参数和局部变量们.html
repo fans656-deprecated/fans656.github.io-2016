@@ -1,0 +1,70 @@
+<html>
+<head>
+<link rel="stylesheet" href="css/posts.css" />
+</head>
+<body>
+<h1><a href="index.html">&lt;- fans656's blog</a></h1>
+<p>
+<span class="date">2016-05-19&nbsp;07:56:58</span><br>
+函数调用的参数和局部变量都是放在栈(stack)中的<br>
+栈是由寄存器esp定义的——esp永远指向栈顶<br>
+函数调用需要保存现场，即记住caller在调用callee前的状态，以便callee运行完后返回caller继续执行。这个现场包括当时寄存器们的值。<br>
+现场加上函数本身的参数和局部变量，一起放在栈上，谓之一个函数的frame<br>
+frame由ebp定义——ebp指向frame底部<br>
+<br>
+一般的x86机上，栈是grow&nbsp;downward的，即从高地址往低地址增长<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;high&nbsp;address&nbsp;&nbsp;os&nbsp;kernel<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;heap<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static<br>
+&nbsp;&nbsp;&nbsp;&nbsp;low&nbsp;address&nbsp;&nbsp;&nbsp;code<br>
+<br>
+先来看看一个简单函数的汇编代码<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;c++<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;f()&nbsp;{}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;main()&nbsp;{&nbsp;f();&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;assembly<br>
+&nbsp;&nbsp;&nbsp;&nbsp;__Z1fv:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;push	ebp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mov	ebp,&nbsp;esp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pop	ebp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_main:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;push	ebp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mov	ebp,&nbsp;esp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and	esp,&nbsp;-16<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call	__Z1fv&nbsp;&nbsp;#&nbsp;f()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mov	eax,&nbsp;0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leave<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret<br>
+<br>
+进入`main`函数时，做了三件事：<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;push&nbsp;ebp&nbsp;&nbsp;#&nbsp;记住caller的frame<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;mov&nbsp;ebp,&nbsp;esp&nbsp;&nbsp;#&nbsp;开启自己的frame<br>
+&nbsp;&nbsp;&nbsp;&nbsp;3.&nbsp;and&nbsp;esp,&nbsp;-16&nbsp;&nbsp;#&nbsp;栈顶16字节对齐&nbsp;(-16&nbsp;是&nbsp;0xfffffff0)<br>
+<br>
+然后，就是&nbsp;call&nbsp;f&nbsp;函数了。call&nbsp;实际上做的是：<br>
+(PS:&nbsp;f被叫成&nbsp;__Z1fv&nbsp;是因为&nbsp;C++&nbsp;的&nbsp;name&nbsp;mangling)<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;把&nbsp;call&nbsp;之后指令的地址入栈<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;跳转到&nbsp;callee&nbsp;的地址&nbsp;(即将&nbsp;callee&nbsp;第一条指令的地址放在&nbsp;eip&nbsp;中)<br>
+<br>
+接下来就执行&nbsp;f&nbsp;的函数体，跟进入main函数时做的事情类似<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;push&nbsp;ebp<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;mov&nbsp;ebp,&nbsp;esp<br>
+<br>
+因为没有别的动作了，接下来就是返回的过程<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;pop&nbsp;ebp&nbsp;&nbsp;#&nbsp;恢复caller的frame<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;ret&nbsp;&nbsp;#&nbsp;返回caller继续执行<br>
+<br>
+ret&nbsp;实际上做的事是从栈上pop出返回地址放进eip中<br>
+
+</p>
+</body>
+</html>
