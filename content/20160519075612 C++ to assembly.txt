@@ -1,3 +1,5 @@
+Question:
+
 What happens when the following C++ program is executed?
     
     void f() {}
@@ -22,3 +24,20 @@ Answer:
                   #     mov esp, ebp
                   #     pop ebp
     ret           # pop the return address back to eip
+
+Question:
+
+Where is automatic variables stored? How?
+
+Answer:
+
+Automatic variables and function arguments are all stored on the stack, along with the "procedure linking informations".
+When a function is entered, it decrement esp to preallocate the space it needs for local variables and function arguments for its callees.
+The size of the space allocated is
+    
+    size(local variables) + max(size(arguments for callee1), size(arguments for callee2), ..., size(arguments for calleen))
+
+plus some unused padding for alignment (16 bytes AFAIK).
+
+Local variables is at the bottom of the stack, accessed by [ebp of caller - offset].
+Arguments is at the top of the stack, accessed by [ebp of callee + offset + size(stack saved ebp, eip, etc..)]

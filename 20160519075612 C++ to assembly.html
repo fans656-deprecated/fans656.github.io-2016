@@ -5,6 +5,8 @@
 <body>
 <h1><a href="index.html">&lt;- fans656's blog</a></h1>
 <p>
+Question:<br>
+<br>
 What&nbsp;happens&nbsp;when&nbsp;the&nbsp;following&nbsp;C++&nbsp;program&nbsp;is&nbsp;executed?<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;f()&nbsp;{}<br>
@@ -29,6 +31,23 @@ Answer:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mov&nbsp;esp,&nbsp;ebp<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pop&nbsp;ebp<br>
 &nbsp;&nbsp;&nbsp;&nbsp;ret&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;pop&nbsp;the&nbsp;return&nbsp;address&nbsp;back&nbsp;to&nbsp;eip<br>
+<br>
+Question:<br>
+<br>
+Where&nbsp;is&nbsp;automatic&nbsp;variables&nbsp;stored?&nbsp;How?<br>
+<br>
+Answer:<br>
+<br>
+Automatic&nbsp;variables&nbsp;and&nbsp;function&nbsp;arguments&nbsp;are&nbsp;all&nbsp;stored&nbsp;on&nbsp;the&nbsp;stack,&nbsp;along&nbsp;with&nbsp;the&nbsp;"procedure&nbsp;linking&nbsp;informations".<br>
+When&nbsp;a&nbsp;function&nbsp;is&nbsp;entered,&nbsp;it&nbsp;decrement&nbsp;esp&nbsp;to&nbsp;preallocate&nbsp;the&nbsp;space&nbsp;it&nbsp;needs&nbsp;for&nbsp;local&nbsp;variables&nbsp;and&nbsp;function&nbsp;arguments&nbsp;for&nbsp;its&nbsp;callees.<br>
+The&nbsp;size&nbsp;of&nbsp;the&nbsp;space&nbsp;allocated&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;size(local&nbsp;variables)&nbsp;+&nbsp;max(size(arguments&nbsp;for&nbsp;callee1),&nbsp;size(arguments&nbsp;for&nbsp;callee2),&nbsp;...,&nbsp;size(arguments&nbsp;for&nbsp;calleen))<br>
+<br>
+plus&nbsp;some&nbsp;unused&nbsp;padding&nbsp;for&nbsp;alignment&nbsp;(16&nbsp;bytes&nbsp;AFAIK).<br>
+<br>
+Local&nbsp;variables&nbsp;is&nbsp;at&nbsp;the&nbsp;bottom&nbsp;of&nbsp;the&nbsp;stack,&nbsp;accessed&nbsp;by&nbsp;[ebp&nbsp;of&nbsp;caller&nbsp;-&nbsp;offset].<br>
+Arguments&nbsp;is&nbsp;at&nbsp;the&nbsp;top&nbsp;of&nbsp;the&nbsp;stack,&nbsp;accessed&nbsp;by&nbsp;[ebp&nbsp;of&nbsp;callee&nbsp;+&nbsp;offset&nbsp;+&nbsp;size(stack&nbsp;saved&nbsp;ebp,&nbsp;eip,&nbsp;etc..)]<br>
 
 </p>
 </body>
