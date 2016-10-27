@@ -1,0 +1,47 @@
+<html>
+<head>
+<link rel="stylesheet" href="css/posts.css" />
+</head>
+<body>
+<h1><a href="index.html">&lt;- fans656's blog</a></h1>
+<p>
+<span class="date">2016-10-27&nbsp;09:47:57</span><br>
+[leetcode<br>
+&nbsp;&nbsp;&nbsp;&nbsp;421<br>
+&nbsp;&nbsp;&nbsp;&nbsp;maximum&nbsp;xor&nbsp;of&nbsp;two&nbsp;numbers&nbsp;in&nbsp;an&nbsp;array<br>
+]<br>
+Method&nbsp;1.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;https://discuss.leetcode.com/topic/63299/python-6-lines-bit-by-bit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;由高位至低位enthusiastic地构造结果，尽量使高位为1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第一次看nums中所有数的最高一位<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第二次看nums中所有书的最高两位<br>
+&nbsp;&nbsp;&nbsp;&nbsp;第三次................最高三位<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;如果这些数中有两个可以异或得到使当前考虑的结果中的位为1，且不与之前设置的那些位冲突的结果，那么就可以将结果当前考虑的位设置为1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;为了避免O(n^2)寻找这两个满足要求的数，我们构造一个集合，然后假设结果当前位已经设置成1，然后看这样的结果与集合中每个数异或的所得是否仍在集合中<br>
+&nbsp;&nbsp;&nbsp;&nbsp;即看a^b==c是否在集合中，如果在，那么b^c==a就是满足要求的两个数<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;另外，answer&nbsp;^&nbsp;1&nbsp;==&nbsp;answer&nbsp;|&nbsp;1<br>
+<br>
+Method&nbsp;2.1&nbsp;trie&nbsp;(fans656)<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;将所有数加入一个trie中，然后如Method&nbsp;1，从左至右构造结果<br>
+&nbsp;&nbsp;&nbsp;&nbsp;想要设置结果当前位为1时，就看置为1的结果与数组中每个数异或所得是否仍在数组中(即这个prefix是否在trie中)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;prefix的长度从1到32，时间复杂度O(n)&nbsp;+&nbsp;O(2n)&nbsp;+&nbsp;...&nbsp;+&nbsp;O(32n)&nbsp;==&nbsp;O(n)<br>
+<br>
+Method&nbsp;2.2&nbsp;trie&nbsp;(tyn)<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;仍是所有数加入trie，然后对每一个数，尝试找出数组中跟它异或所能得的最大值<br>
+&nbsp;&nbsp;&nbsp;&nbsp;最后，所有这些最大值中最大的那个就是结果<br>
+&nbsp;&nbsp;&nbsp;&nbsp;找的方法是，从左至右遍历这个数的位，trie从根节点起始<br>
+&nbsp;&nbsp;&nbsp;&nbsp;如果为0，就尝试在trie中找1（反之亦然），如果找不到，就退而求其次跟随trie中有的节点<br>
+&nbsp;&nbsp;&nbsp;&nbsp;这样的结果就是找到了跟这个数能异或得出的最大值<br>
+<br>
+Method&nbsp;2.3&nbsp;trie&nbsp;incremental<br>
+&nbsp;&nbsp;&nbsp;&nbsp;https://discuss.leetcode.com/topic/64753/31ms-o-n-java-solution-using-trie<br>
+&nbsp;&nbsp;&nbsp;&nbsp;不必把所有数都添进去之后才开始查找，可以每添一个的同时就找<br>
+&nbsp;&nbsp;&nbsp;&nbsp;因为异或操作是满足交换律的，这样对于每个数，都在它之前的数中找了能异或出的最大值，这样最终也能遍历到结果<br>
+
+</p>
+</body>
+</html>
