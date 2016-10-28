@@ -1,0 +1,3 @@
+2016-10-29 00:06:14
+https://leetcode.com/articles/remove-element/
+rare deletion 的优化

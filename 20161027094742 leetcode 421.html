@@ -41,6 +41,18 @@ Method&nbsp;2.3&nbsp;trie&nbsp;incremental<br>
 &nbsp;&nbsp;&nbsp;&nbsp;https://discuss.leetcode.com/topic/64753/31ms-o-n-java-solution-using-trie<br>
 &nbsp;&nbsp;&nbsp;&nbsp;不必把所有数都添进去之后才开始查找，可以每添一个的同时就找<br>
 &nbsp;&nbsp;&nbsp;&nbsp;因为异或操作是满足交换律的，这样对于每个数，都在它之前的数中找了能异或出的最大值，这样最终也能遍历到结果<br>
+&nbsp;&nbsp;&nbsp;&nbsp;其实跟tyn的方法只差了一个n&nbsp;——&nbsp;33n&nbsp;跟&nbsp;32n&nbsp;的区别<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;但是在特定的情境下，这个方法就非常优秀了<br>
+&nbsp;&nbsp;&nbsp;&nbsp;比如<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;num是从网络中一个一个获取的，任意时刻都要求能给出当前已有的nums中可异或出的最大值<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;——&nbsp;该算法是online算法<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;nums存在硬盘中，相当大，比如300GB。此时一次遍历跟两次遍历就差距略大了<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;——&nbsp;当&nbsp;cn&nbsp;中的常数&nbsp;c&nbsp;很大时，2n&nbsp;跟&nbsp;1n&nbsp;就有难以忽略的差距了<br>
+<br>
+More<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;此题求的是异或，如果换成求&nbsp;或、与&nbsp;呢？<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;能不能换成某类&nbsp;binary&nbsp;function，把num换成general&nbsp;list<br>
 
 </p>
 </body>

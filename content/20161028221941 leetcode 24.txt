@@ -1,0 +1,10 @@
+2016-10-28 22:19:51
+Method 1.
+    正常
+
+Method 2.
+    递归
+
+See !!!
+    https://discuss.leetcode.com/topic/18860/7-8-lines-c-python-ruby/2
+    这个用法好神

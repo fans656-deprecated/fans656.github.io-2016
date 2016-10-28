@@ -1,0 +1,49 @@
+2016-10-27 16:22:59
+[leetcode
+    17
+    letter combinations of a phone number
+]
+Method 1.
+    自己的做法
+    所求结果就是每个digit代表的字符set的笛卡尔积
+    用iters存储指向每个set中字符的index
+    然后递增iters
+        0 0 0 -> 0 0 1 -> 0 0 2 -> 0 1 0 -> ...
+    将递增过程中的iters的每个取值转换为string
+
+Method 1.1
+    https://discuss.leetcode.com/topic/507/i-use-deep-first-search-dfs-idea-is-there-any-better-solutions/17
+    搜索
+        Just an another solution that may inspire, with no recursion
+    用数字 [0..prod(len(s) for s in sets)) 来编码某个特定的indexes
+    然后将数字转换为indexes
+    其实就是将数字表示为各位基数不同的一种数字
+    比如 239 对应的集合是 'abc', 'def', 'wxyz'
+    bases 就是 3, 3, 4
+    结果总共有 3 * 3 * 4 == 36 个
+    把 [0..35] 每个数转换为这种奇怪的 (3,3,4) 进制的数
+        0 -> 0 0 0
+        1 -> 0 0 1
+        2 -> 0 0 2
+        3 -> 0 0 3
+        4 -> 0 1 0
+        5 -> 0 1 1
+        ...
+        35 -> 2 2 3
+
+Method 2
+    也是上面那个链接里的，递归
+        cvt(digit) == set(digits[0]) * cvt(digits[1:])
+
+Method 3
+    构造型的
+    同上，搜索
+        I think I got a brief solution, it is not recursive.
+    先第一个digit的集合，然后拿第二个digit的集合，把第一个集合里每个元素prepend到这个集合的每个元素前面
+    
+    但是这个的缺点是，添加新的set需要对result的遍历越来越耗时
+    比如sets的大小是 3 3 4 5
+    第一次遍历1个元素
+    第二次    3个
+    第三次    9个
+    第四次   36个

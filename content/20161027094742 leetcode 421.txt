@@ -34,3 +34,15 @@ Method 2.3 trie incremental
     https://discuss.leetcode.com/topic/64753/31ms-o-n-java-solution-using-trie
     不必把所有数都添进去之后才开始查找，可以每添一个的同时就找
     因为异或操作是满足交换律的，这样对于每个数，都在它之前的数中找了能异或出的最大值，这样最终也能遍历到结果
+    其实跟tyn的方法只差了一个n —— 33n 跟 32n 的区别
+    
+    但是在特定的情境下，这个方法就非常优秀了
+    比如
+        1. num是从网络中一个一个获取的，任意时刻都要求能给出当前已有的nums中可异或出的最大值
+        —— 该算法是online算法
+        2. nums存在硬盘中，相当大，比如300GB。此时一次遍历跟两次遍历就差距略大了
+        —— 当 cn 中的常数 c 很大时，2n 跟 1n 就有难以忽略的差距了
+
+More
+    1. 此题求的是异或，如果换成求 或、与 呢？
+    2. 能不能换成某类 binary function，把num换成general list

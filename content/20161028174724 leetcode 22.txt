@@ -1,0 +1,11 @@
+2016-10-28 17:47:35
+Method 1.
+    https://discuss.leetcode.com/topic/4485/concise-recursive-c-solution
+    跟自己的想法一样
+    递归相当于在内存中构造了一棵树，并且是深度优先
+    每次得到一个结果后，回退节点之下的那些都可以扔掉
+    另外每个节点中不保存完整的string，而是所有节点保存一个string的ref
+    反正同一时间只产生一个结果，不同结果对string的使用不冲突
+
+    PS：n对括号产生多少个结果呢？—— Catalan Number
+    https://discuss.leetcode.com/topic/4485/concise-recursive-c-solution
